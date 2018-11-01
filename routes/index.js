@@ -1,6 +1,9 @@
 module.exports = {
-    CreateAll: function(app){
-        require('./signature').Create(app);
-        require('./log').Create(app);
+    CreateAll: function (app) {
+        return new Promise((resolve) => {
+            require('./signature').Create(app);
+            require('./log').Create(app);
+            resolve(app);
+        });
     }
 };
