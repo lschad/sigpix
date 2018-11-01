@@ -6,17 +6,13 @@ module.exports = {
 
         app.get('/:id/signature', (req, res) => {
 
-            let track = new Track({
+            new Track({
                 id: req.params['id'],
                 timestamp: new Date().toISOString(),
                 ua: req.headers['user-agent'] || 'unknown',
                 ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-            });
-            track.save((err, track) => {
-                if (err) return console.error(err);
-                console.debug(`Saved new Track\n${track}`);
-            });
-
+                type: 'VIEW'
+            }).Save();
 
             res.sendFile(globals.SIGNATURE);
         });
