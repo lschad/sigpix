@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mongoose" type="javaScript">
+    <CLASSES />
+    <DOCUMENTATION>
+      <root url="https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/master/types/mongoose/index.d.ts" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>
