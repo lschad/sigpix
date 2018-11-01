@@ -1,20 +1,9 @@
-const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
+const Track = require('./models/Track');
+const globals = require('./globals');
 
 const app = express();
-const db = mongoose.connection;
-
-const appObj = {
-    HOST: process.env.SP_HOST || '0.0.0.0',
-    PORT: process.env.SP_PORT || 8080,
-    DB_HOST: process.env.SP_DBHOST || '127.0.0.1',
-    DB_PORT: process.env.SP_DBPORT || '27017',
-    DB_NAME: process.env.SP_DBNAME || 'sigpix',
-    DB_USER: process.env.SP_DBUSER || '',
-    DB_PASS: process.env.SP_DBPASS || '',
-    SIGNATURE: process.env.SP_SIGNATURE || path.join(__dirname, 'blank.png')
-};
 
 function ConnectDatabase(obj) {
     return new Promise((resolve, reject) => {
@@ -43,19 +32,38 @@ function StartServer(obj) {
     });
 }
 
-function SetupRoutes(obj) {
-    return new Promise((resolve, reject) => {
+function CreateRoutes(obj) {
+    return new Promise((resolve) => {
+
         app.get('/:id/signature', (req, res) => {
 
             let info = {
                 id: req.params['id'],
-                Timestamp: new Date().toISOString(),
-                UserAgent: req.headers['user-agent'] || 'unknown',
-                ipv4: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                timestamp: new Date().toISOString(),
+                ua: req.headers['user-agent'] || 'unknown',
+                ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
             };
 
+            let track = new Track(info);
+            track.save(err => {
+                if (err) return console.error(err);
+            });
 
             res.sendFile(obj.SIGNATURE);
+        });
+
+        app.get('/log', (req, res) => {
+            Track.find((err, tracks) => {
+                if (err) return res.send(err);
+                return res.send(tracks);
+            });
+        });
+
+        app.get('/log/:id', (req, res) => {
+            Track.find({id: req.params['id']}, (err, tracks) => {
+                if (err) return res.send(err);
+                return res.send(tracks);
+            });
         });
 
         resolve(obj);
@@ -63,7 +71,7 @@ function SetupRoutes(obj) {
 }
 
 
-ConnectDatabase(appObj)
+ConnectDatabase(globals)
     .then(StartServer)
-    .then(SetupRoutes)
+    .then(CreateRoutes)
     .catch(console.error);
