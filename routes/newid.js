@@ -30,8 +30,6 @@ module.exports = newid = {
                     let index = abc.indexOf(letter);
                     if (index > -1) {
                         np += index;
-                    } else {
-                        console.info(letter);
                     }
                 }
 
