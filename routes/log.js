@@ -1,7 +1,8 @@
 let Track = require('../models/Track');
 
 module.exports = {
-    create: function (app) {
+    Create: function (app) {
+
         app.get('/log', (req, res) => {
             Track.find((err, tracks) => {
                 if (err) return res.send(err);

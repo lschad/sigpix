@@ -2,7 +2,8 @@ let globals = require('../globals');
 let Track = require('../models/Track');
 
 module.exports = {
-    create: function (app) {
+    Create: function (app) {
+
         app.get('/:id/signature', (req, res) => {
 
             let track = new Track({
