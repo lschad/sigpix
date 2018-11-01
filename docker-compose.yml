@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: sigpix-db          
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=sigpix
+      - MONGO_INITDB_ROOT_PASSWORD=CHANGE_ME
+      - MONGO_INITDB_DATABASE=sigpix
+    volumes:
+      - /srv/sigpix/db:/data/db
+    networks:
+      - sigpix
+
+  app:
+    container_name: sigpix
+    image: boop5/sigpix
+    restart: always
+    environment:
+      - SP_SIGNATURE=/sigpix/signature.png
+      - SP_DBHOST=sigpix-db
+    volumes:
+      - /srv/sigpix/app:/sigpix
+    networks:
+      - sigpix
+
+networks:
+  sigpix:
+    name: 'sigpix'
+    driver: 'bridge'
