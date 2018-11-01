@@ -83,3 +83,6 @@ typings/
 
 # build output
 ./build
+
+
+**/.idea/workspace.xml
