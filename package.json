@@ -2,11 +2,15 @@
   "name": "sigpix",
   "version": "1.0.0",
   "description": "Tracking Pixel. Intended to use with a signature for emails.",
+  "author": "Lucas Schad <schad.lucas@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lschad/sigpix"
+  },
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "author": "Lucas Schad <schad.lucas@gmail.com>",
   "license": "GPL-2.0",
   "dependencies": {
     "express": "^4.16.4"
