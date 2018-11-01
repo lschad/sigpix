@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Track = require('./models/Track');
 const globals = require('./globals');
+const routes = require('./routes');
 
 const app = express();
 
@@ -34,38 +35,7 @@ function StartServer(obj) {
 
 function CreateRoutes(obj) {
     return new Promise((resolve) => {
-
-        app.get('/:id/signature', (req, res) => {
-
-            let info = {
-                id: req.params['id'],
-                timestamp: new Date().toISOString(),
-                ua: req.headers['user-agent'] || 'unknown',
-                ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-            };
-
-            let track = new Track(info);
-            track.save(err => {
-                if (err) return console.error(err);
-            });
-
-            res.sendFile(obj.SIGNATURE);
-        });
-
-        app.get('/log', (req, res) => {
-            Track.find((err, tracks) => {
-                if (err) return res.send(err);
-                return res.send(tracks);
-            });
-        });
-
-        app.get('/log/:id', (req, res) => {
-            Track.find({id: req.params['id']}, (err, tracks) => {
-                if (err) return res.send(err);
-                return res.send(tracks);
-            });
-        });
-
+        routes.createAll(app);
         resolve(obj);
     });
 }
